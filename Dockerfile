@@ -1,4 +1,4 @@
-FROM nexus-repo.dmp.vimpelcom.ru/dmp_core/python-base:v3.10-2
+FROM nexus-repo.*****/***/python-base:v3.10-2
 
 COPY requirements.txt requirements.txt
 
