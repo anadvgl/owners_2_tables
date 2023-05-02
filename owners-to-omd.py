@@ -18,7 +18,7 @@ mysqluser = os.getenv('mysqluser')
 mysqlpwd = os.getenv('mysqlpwd')
 
 # connect to mysql
-mysql_conn_str = f"mysql+pymysql://{mysqluser}:{mysqlpwd}@k8s-dev-10.dmp.vimpelcom.ru:32646/openmetadata_db"
+mysql_conn_str = f"mysql+pymysql://{mysqluser}:{mysqlpwd}@host:port/db"
 mysql_engine = create_engine(mysql_conn_str)
 mysql_engine.execute("SET FOREIGN_KEY_CHECKS=0")
 mysql_engine.connect()
@@ -61,7 +61,7 @@ def get_token(userpwd) -> str:
         "client_secret": userpwd,
     }
     response = httpx.post(
-        "https://keycloak.prod.dmp.vimpelcom.ru/auth/realms/dmp-core-services/protocol/openid-connect/token",
+        "https://keycloak/token",
         data=data,
         verify=False,
         timeout=httpx.Timeout(300),
@@ -90,7 +90,7 @@ else:
     for name in df_teams['team_name']:
         token = get_token(userpwd)
         response = requests.get(
-            f"https://open-metadata.prod.dmp.vimpelcom.ru/api/v1/teams/name/{name}",
+            f"https://host/api/v1/teams/name/{name}",
             headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"},
             data={},
             verify=False,
@@ -108,7 +108,7 @@ else:
     for id, team_id in zip(df_final.table_id, df_final.team_id):
         token = get_token(userpwd)
         response = requests.patch(
-                f"https://open-metadata.prod.dmp.vimpelcom.ru/api/v1/tables/{id}",
+                f"https://host/api/v1/tables/{id}",
                 headers={"Content-Type": "application/json-patch+json", "Authorization": f"Bearer {token}"},
                 data="""[{"op":"add", "path":"/owner",""" + " """""value": {"id":""" + f'"{team_id}' + """", "type": "team"}}]""",
                 verify=False,
