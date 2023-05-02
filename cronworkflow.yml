@@ -1,0 +1,10 @@
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: owners-to-omd
+spec:
+  schedule: "0 1 * * 6"
+  timezone: "Europe/Moscow"
+  workflowSpec:
+    workflowTemplateRef:
+      name: owners-to-omd
